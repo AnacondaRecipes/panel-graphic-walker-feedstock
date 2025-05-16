@@ -1,6 +1,5 @@
 {% set name = "panel-graphic-walker" %}
 {% set version = "0.6.4" %}
-{% set python_min = "3.10" %}
 
 package:
   name: {{ name|lower }}
@@ -11,13 +10,13 @@ source:
   sha256: 0881df1300e17a63ada0c6689f57ddb3f435c84576278a0f6092ed1239dee9ad
 
 build:
-  noarch: python
+  skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
   host:
-    - python {{ python_min }}
+    - python
     - hatchling
     - hatch-vcs
     - panel >=1.6.1
@@ -27,9 +26,13 @@ requirements:
     - nodejs >=18
     - esbuild
   run:
-    - python >={{ python_min }}
+    - python
     - panel >=1.6.1
     - narwhals
+  run_constrained:
+    - duckdb
+    - gw-dsl-parser
+    - pygwalker >=0.4.9.11
 
 test:
   imports:
@@ -37,14 +40,21 @@ test:
   commands:
     - pip check
   requires:
-    - python {{ python_min }}
+    - python
     - pip
 
 about:
   home: https://github.com/panel-extensions/panel-graphic-walker
   summary: A project providing a Graphic Walker Pane for use with HoloViz Panel.
+  description: |
+    panel-graphic-walker is a Panel extension providing Graphic Walker
+    integration for data visualization. It allows users to create interactive
+    visual exploratory data analysis interfaces directly in Panel dashboards.
   license: MIT
+  license_family: MIT
   license_file: LICENSE.md
+  doc_url: https://github.com/panel-extensions/panel-graphic-walker
+  dev_url: https://github.com/panel-extensions/panel-graphic-walker
 
 extra:
   recipe-maintainers:
