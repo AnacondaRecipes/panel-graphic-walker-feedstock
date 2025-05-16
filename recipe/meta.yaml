@@ -37,11 +37,14 @@ requirements:
 test:
   imports:
     - panel_gwalker
+  source_files:
+    - tests
   commands:
     - pip check
   requires:
-    - python
     - pip
+# pytesting is available, but requires the building of dependencies that are not available.
+# we will keep simple testing for now.
 
 about:
   home: https://github.com/panel-extensions/panel-graphic-walker
