@@ -30,7 +30,6 @@ requirements:
     - panel >=1.6.1
     - narwhals
   run_constrained:
-    - duckdb
     - pygwalker >=0.4.9.11
 
 test:
