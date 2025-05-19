@@ -56,7 +56,7 @@ about:
   license: MIT
   license_family: MIT
   license_file: LICENSE.md
-  doc_url: https://github.com/panel-extensions/panel-graphic-walker
+  doc_url: https://github.com/panel-extensions/panel-graphic-walker/blob/main/README.md
   dev_url: https://github.com/panel-extensions/panel-graphic-walker
 
 extra:
