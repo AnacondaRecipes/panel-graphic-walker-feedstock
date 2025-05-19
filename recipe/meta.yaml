@@ -31,7 +31,6 @@ requirements:
     - narwhals
   run_constrained:
     - duckdb
-    - gw-dsl-parser
     - pygwalker >=0.4.9.11
 
 test:
