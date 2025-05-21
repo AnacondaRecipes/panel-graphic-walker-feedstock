@@ -23,6 +23,7 @@ requirements:
     - packaging
     - narwhals
     - pip
+    # nodejs/esbuild required, see https://github.com/panel-extensions/panel-graphic-walker/blob/main/DEVELOPER_GUIDE.md
     - nodejs >=18
     - esbuild
   run:
