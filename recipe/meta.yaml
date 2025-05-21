@@ -1,50 +1,62 @@
 {% set name = "panel-graphic-walker" %}
 {% set version = "0.6.4" %}
-{% set python_min = "3.10" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/p/panel_graphic_walker/panel_graphic_walker-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/p/panel_graphic_walker/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
   sha256: 0881df1300e17a63ada0c6689f57ddb3f435c84576278a0f6092ed1239dee9ad
 
 build:
-  noarch: python
+  skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
   host:
-    - python {{ python_min }}
+    - python
     - hatchling
     - hatch-vcs
     - panel >=1.6.1
     - packaging
     - narwhals
     - pip
+    # nodejs/esbuild required, see https://github.com/panel-extensions/panel-graphic-walker/blob/main/DEVELOPER_GUIDE.md
     - nodejs >=18
     - esbuild
   run:
-    - python >={{ python_min }}
+    - python
     - panel >=1.6.1
     - narwhals
+  run_constrained:
+    - pygwalker >=0.4.9.11
 
 test:
   imports:
     - panel_gwalker
+  source_files:
+    - tests
   commands:
     - pip check
   requires:
-    - python {{ python_min }}
     - pip
+# pytesting is available, but requires the building of dependencies that are not available.
+# we will keep simple testing for now.
 
 about:
   home: https://github.com/panel-extensions/panel-graphic-walker
   summary: A project providing a Graphic Walker Pane for use with HoloViz Panel.
+  description: |
+    panel-graphic-walker is a Panel extension providing Graphic Walker
+    integration for data visualization. It allows users to create interactive
+    visual exploratory data analysis interfaces directly in Panel dashboards.
   license: MIT
+  license_family: MIT
   license_file: LICENSE.md
+  doc_url: https://github.com/panel-extensions/panel-graphic-walker/blob/main/README.md
+  dev_url: https://github.com/panel-extensions/panel-graphic-walker
 
 extra:
   recipe-maintainers:
