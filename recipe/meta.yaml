@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/p/panel_graphic_walker/panel_graphic_walker-{{ version }}.tar.gz
+  url: url: https://pypi.org/packages/source/p/panel_graphic_walker/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
   sha256: 0881df1300e17a63ada0c6689f57ddb3f435c84576278a0f6092ed1239dee9ad
 
 build:
