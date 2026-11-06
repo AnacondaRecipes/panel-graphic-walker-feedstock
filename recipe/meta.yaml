@@ -8,11 +8,13 @@ package:
 source:
   url: https://pypi.org/packages/source/p/panel_graphic_walker/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
   sha256: ae89a4a22f2db53b0bc48a2c86b95813277e3209b73b39edd306a0c8d2dc9cb7
+  patches:
+    - patches/pin-graphic-walker.patch
 
 build:
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  number: 1
 
 requirements:
   host:
@@ -40,6 +42,7 @@ test:
     - tests
   commands:
     - pip check
+    - python -c "from panel_gwalker._gwalker import GraphicWalker; assert GraphicWalker._bundle.is_file() and GraphicWalker._bundle.stat().st_size > 0"
   requires:
     - pip
 # pytesting is available, but requires the building of dependencies that are not available.

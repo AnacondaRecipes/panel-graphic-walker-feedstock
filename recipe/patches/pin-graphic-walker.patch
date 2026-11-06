@@ -1,0 +1,55 @@
+# Panel converts the CDN version to a caret range during bundling. Pin the
+# generated npm dependency to the component's version to retain React 18 support.
+diff --git a/hatch_build.py b/hatch_build.py
+index ffadcf1..6fffb45 100644
+--- a/hatch_build.py
++++ b/hatch_build.py
+@@ -1,9 +1,11 @@
+ from __future__ import annotations
+ 
++import json
+ import os
+ import sys
+ from pathlib import Path
+ from typing import Any
++from unittest.mock import patch
+ 
+ from hatchling.builders.hooks.plugin.interface import BuildHookInterface
+ 
+@@ -12,6 +14,7 @@ GREEN, RED, RESET = "\033[0;32m", "\033[0;31m", "\033[0m"
+ 
+ 
+ def compile_bundle():
++    import panel.io.compile as panel_compile
+     from panel.io.compile import compile_components, find_module_bundles
+ 
+     print(
+@@ -21,12 +24,24 @@ def compile_bundle():
+ 
+     sys.path.insert(0, str(BASE_DIR / "src"))
+     module_bundles = find_module_bundles("panel_gwalker")
++    from panel_gwalker._gwalker import VERSION
++
++    generate_project = panel_compile.generate_project
++
++    def generate_pinned_project(components, path, *args, **kwargs):
++        generate_project(components, path, *args, **kwargs)
++        package_path = Path(path) / "package.json"
++        package = json.loads(package_path.read_text(encoding="utf-8"))
++        package["dependencies"]["@kanaries/graphic-walker"] = VERSION
++        package_path.write_text(json.dumps(package, indent=2), encoding="utf-8")
++
+     errors = 0
+     for bundle, components in module_bundles.items():
+-        ret = compile_components(
+-            components,
+-            outfile=bundle,
+-        )
++        with patch.object(panel_compile, "generate_project", generate_pinned_project):
++            ret = compile_components(
++                components,
++                outfile=bundle,
++            )
+         if ret is None:
+             errors += 1
+         else:
